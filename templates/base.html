@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset='utf-8'>
+	<title>Registration</title>
+</head>
+<body>
+	<h1>Course Registration</h1>
+	
+	<form method="post" action="/newuser">
+		<input type="hidden" name="action" value="add_user">
+		<legend>Name</legend>
+		<input type="text" name="first_name" placeholder="First name" required>
+		<input type="text" name="last_name" placeholder="Last name" required><br><br>
+		<legend>Contact Info</legend>
+		<input type="email" name="user_email" placeholder="E-mail" required><br>
+		<input type="tel" name="user_tel" placeholder="tel" required><br><br>
+		<legend>Gender</legend>
+		<input type="radio" name="user_gen" value="female" checked>Female<br>
+		<input type="radio" name="user_gen" value="male">Male<br>
+		<input type="radio" name="user_gen" value="other">Other<br><br>
+		<legend>Class Enroll</legend>
+		{% if courses|length > 0 %}
+			{% for c in courses %}
+			<input type="checkbox" name="user_courses[]" value="{{ c.key }}">{{ c.name }}<br>
+			{% endfor %}
+			<br>
+		{% else %}
+		<p>No courses available</p>
+		{% endif %}
+		<input type="submit" value="Add User">
+	</form>
+	<br>
+	<form method="post" action="/join">
+		<legend>Course Name</legend>
+		<input type="hidden" name="action" value="add_course">
+		<input type="text" name="course_name" placeholder="Course Name" required>
+		<input type="submit" value="Add Course">
+	</form>
+	{% if message %}
+	<section>
+		<h3>{{ message }}</h3>
+	</section>
+	{% endif %}
+	{% if users %}
+	<section>
+		{% for u in users %}
+			<h3><a href="/view?user_key={{ u.key }}&action=view_user"> {{ u.first_name }} {{ u.last_name }}</a></h3>
+		  {% if u.courses|length > 0 %}
+			  {% for c in u.courses %}
+			  	{{ get_course_name(c).name }}
+			  	<br>
+				{% endfor %}
+			{% else %}
+				<p>Not enrolled in any classes.
+			{% endif %}
+			<a href="/edit?user_key={{ u.key }}&action=edit_user">Edit</a><br>
+		{% endfor %}
+
+	</section>
+	{% else %}
+	<section>
+		<p>No users enrolled</p>
+	</section>
+	{% endif %}
+</body>
+</html>

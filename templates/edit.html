@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+	
+	<head>
+	<meta charset="utf-8">
+	<title>Edit User</title>
+	</head>
+	<body>
+		<h4><a href="/">Home</a></h4>
+		<h2>{{ first_name }} {{ last_name }}</h2>
+		<form method="post" action="/edit">
+		<input type="hidden" name="user_key" value="{{ ukey }}">
+		<legend>Name</legend>
+		<input type="text" name="first_name" value="{{ first_name }}" required>
+		<input type="text" name="last_name" value="{{ last_name }}" required><br><br>
+		<legend>Contact Info</legend>
+		<input type="email" name="email" value="{{ email }}" required><br>
+		<input type="tel" name="user_tel" value="{{ user_tel }}" required><br><br>
+		<legend>Gender</legend>
+
+		{% if user_gen == 'female' %}
+			<input type="radio" name="gender" value="female" checked>Female
+		{% else %}
+			<input type="radio" name="gender" value="female">Female
+		{% endif %}
+		{% if user_gen == 'male' %}
+			<input type="radio" name="gender" value="male" checked>Male
+		{% else %}
+			<input type="radio" name="gender" value="male">Male
+		{% endif %}
+		{% if user_gen == 'other' %}
+			<input type="radio" name="gender" value="other" checked>Other
+		{% else %}
+			<input type="radio" name="gender" value="other">Other
+		{% endif %}
+
+		
+		<p>
+			Check boxes to enroll in course.<br>
+			Uncheck boxes to withdraw from course.<br>
+		</p>
+		
+		<legend>Courses</legend>
+			{% if course_list|length > 0 %}
+				{% for k in course_list %}
+
+					{% set found = {'enrolled': False} %}
+					
+					{% for c in courses %}
+						{% if k.name == get_course_name(c).name %}
+
+							<label>{{ k.name }}</label><input type="checkbox" name="user_courses[]" value="{{ k.key }}" checked>
+							{% if found.update({'enrolled': True}) %} {% endif %}
+
+							{% break %}
+						{% endif %}
+					{% endfor %}
+
+					{% if found.enrolled %}
+					{% else %}
+						<label>{{ k.name }}</label><input type="checkbox" name="user_courses[]" value="{{ k.key }}">
+					{% endif %}
+
+						<br />
+			
+				{% endfor %}
+			{% endif %}
+			<br>
+			<input type="submit" value="Save changes">
+
+	</body>
+</html>

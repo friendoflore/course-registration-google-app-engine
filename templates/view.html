@@ -1,0 +1,23 @@
+<!DOCTYPE>
+<html lang="en">
+<head>
+	<meta charset="utf=8">
+	<title>View User</title>
+</head>
+<body>
+	<h4><a href="/">Home</a></h4>
+	<h3>{{ first_name }} {{ last_name }}</h3>
+	<h4>Email: {{ email }}</h4>
+	<h4>Tel: {{ user_tel }}</h4>
+	<h4>{{ user_gen }}</h4>
+	{% if course_list|length > 0 %}
+		{% for k in course_list %}
+			{{ k.name }}
+			<br>
+		{% endfor %}
+	{% endif %}
+
+		<a href="/edit?user_key={{ ukey }}&action=edit_user">Edit</a>
+
+</body>
+</html>
